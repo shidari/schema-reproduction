@@ -1,11 +1,11 @@
 import { z } from "zod";
-import { JobInsertBodySchema } from "../job-store";
 import {
   RawEmployeeCountSchema,
   RawExpiryDateSchema,
   RawReceivedDateShema,
   RawWageSchema,
   RawWorkingHoursSchema,
+  JobInfoSchema,
 } from "./raw";
 
 export const ParsedReceivedDateSchema = RawReceivedDateShema.transform(
@@ -84,21 +84,36 @@ export const ParsedEmploymentCountSchema = RawEmployeeCountSchema.transform(
     .int("Must be an integer")
     .nonnegative("Must be a non-negative number"),
 );
-export const JobSchema = JobInsertBodySchema.extend({
+export const JobSchema = JobInfoSchema.omit({
+  wage: true,
+  workingHours: true,
+  receivedDate: true,
+  expiryDate: true,
+  employeeCount: true,
+}).extend({
+  wageMax: z.number(),
+  wageMin: z.number(),
+  workingStartTime: z.string().optional(),
+  workingEndTime: z.string().optional(),
+  receivedDate: z.string(),
+  expiryDate: z.string(),
+  employeeCount: z.number().int().nonnegative(),
   createdAt: z.string(),
   updatedAt: z.string(),
   status: z.string(),
 });
 console.log(`JobSchema: ${JSON.stringify(JobSchema,null,2)}`)
 
-export const JobSchemaForUI = JobSchema.omit({
-  wageMax: true,
-  wageMin: true,
-  workingEndTime: true,
-  workingStartTime: true,
-  status: true,
+export const JobSchemaForUI = JobInfoSchema.omit({
+  receivedDate: true,
+  expiryDate: true,
+  employeeCount: true,
 }).extend({
+  receivedDate: z.string(),
+  expiryDate: z.string(),
+  employeeCount: z.number().int().nonnegative(),
+  createdAt: z.string(),
+  updatedAt: z.string(),
   workingHours: z.string(),
-  wage: z.string(),
 });
 console.log(`JobSchemaForUI: ${JSON.stringify(JobSchemaForUI,null,2)}`)

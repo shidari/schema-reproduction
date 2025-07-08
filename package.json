@@ -8,6 +8,7 @@
     }
   },
   "scripts": {
+    "type-check":"tsc",
     "build": "tsup",
     "verify": "pnpm build && node dist/index.mjs"
   },
