@@ -1,0 +1,22 @@
+{
+  "name": "@sho/schema",
+  "version": "1.0.0",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    }
+  },
+  "scripts": {
+    "build": "tsup",
+    "verify": "pnpm build && node dist/index.mjs"
+  },
+  "dependencies": {
+    "zod": "^3.25.74"
+  },
+  "devDependencies": {
+    "playwright": "^1.53.1",
+    "tsup": "^8.5.0",
+    "typescript": "^5.8.3"
+  }
+}
